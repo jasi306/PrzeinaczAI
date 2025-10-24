@@ -1,0 +1,14 @@
+{
+  "name": "Hello World GPT POC",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "Loguje hello-world i robi minimalne zapytanie do GPT.",
+  "host_permissions": ["https://api.openai.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
