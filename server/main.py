@@ -53,7 +53,7 @@ VOICES = {
         }
     },
 
-    "yoda": {
+    "joda": {
         "voice_id": "8Gg9X8A0A0WIZ08saHS5",
         "voice_settings": {
             "stability": 0.75,
