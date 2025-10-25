@@ -7,7 +7,6 @@ const accent2 = "#22d3ee";
 const border = "#e5e7eb";
 const shadow = "0 8px 24px rgba(2,6,23,.08)";
 
-player()
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "RUN_EXTRACTION") {
@@ -181,7 +180,6 @@ async function extractAndSendArticle(persona, absurd_level) {
   const clone = document.cloneNode(true);
   const reader = new Readability(clone);
   const article = reader.parse();
-
   if (!article) {
     console.error("⚠️ No article content could be extracted. ⚠️");
     return;
@@ -198,5 +196,214 @@ async function extractAndSendArticle(persona, absurd_level) {
     alert("SERVER " + persona + " " + absurd_level);
   }
 
-  insertNewHeader(await response);
+  // 3. podmień zawartość artykułu na stronie
+  replaceArticleBody(transformedText);
+
+  // 4. pokaż mały widget 'Generate TTS'
+  createGenerateWidget(transformedText);
+}
+
+/* ---------------- BACKEND KOMUNIKACJA ---------------- */
+
+async function getPersonaResponse(article, persona, personaDescription){
+  const response = await fetch("http://localhost:8000/text/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: article.title,
+      persona: persona,
+      personaDescription: personaDescription,
+      textContent: article.textContent
+    })
+  });
+
+  const result = await response.json();
+  return result.msg;
+}
+
+async function requestTTS(text, preset, speed) {
+  const body = { text, preset };
+  if (typeof speed === "number") body.speed = speed;
+
+  const r = await fetch("http://localhost:8000/tts/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const data = await r.json();
+  return "http://localhost:8000" + data.download_url;
+}
+
+/* ---------------- PODMIANA ARTYKUŁU ---------------- */
+
+function replaceArticleBody(newHTML) {
+  let target = document.querySelector("article");
+
+  if (!target) {
+    const candidates = Array.from(document.querySelectorAll("main, .content, .post, .article, [role='main']"));
+    target = pickBiggestTextBlock(candidates);
+  }
+
+  if (!target) {
+    target = document.body;
+  }
+
+  target.innerHTML = newHTML;
+}
+
+function pickBiggestTextBlock(nodes) {
+  let best = null;
+  let bestScore = 0;
+  nodes.forEach(n => {
+    const txt = n.innerText || "";
+    const score = txt.length;
+    if (score > bestScore) {
+      bestScore = score;
+      best = n;
+    }
+  });
+  return best;
+}
+
+/* ---------------- MINI WIDGET "GENERATE TTS" ---------------- */
+
+function createGenerateWidget(fullTextForTTS) {
+  // pobieramy personę (avatar + preset)
+  let personaId = "kapitan-bomba";
+
+  try {
+    const maybe = chrome.storage?.sync?.get?.(["persona_id"]);
+    if (maybe && typeof maybe.then === "function") {
+      maybe.then(v => { if (v.persona_id) personaId = v.persona_id; setupAvatar(); });
+    } else if (chrome.storage && chrome.storage.sync) {
+      chrome.storage.sync.get(["persona_id"], v => {
+        if (v.persona_id) personaId = v.persona_id;
+        setupAvatar();
+      });
+    }
+  } catch {
+    // jeśli nie ma storage, zostaje domyślna personaId
+  }
+
+  const PERSONA_IMG = {
+    "robert": "personas/robert.png",
+    "kapitan-bomba": "personas/bomba.png",
+    "yoda": "personas/yoda.png"
+  };
+
+  // kontener małego okienka
+  const box = document.createElement("div");
+  box.style.cssText = [
+    "position:fixed",
+    "z-index:2147483647",
+    "width:220px",
+    "padding:12px",
+    "background:#111",
+    "color:#fff",
+    "border-radius:12px",
+    "box-shadow:0 8px 24px rgba(0,0,0,.4)",
+    "font:13px system-ui, Arial",
+    "user-select:none",
+    "cursor:move",
+    "right:16px",
+    "bottom:16px",
+    "display:flex",
+    "align-items:center",
+    "gap:10px"
+  ].join(";");
+
+  const avatar = new Image();
+  avatar.alt = "persona";
+  avatar.style.cssText = [
+    "width:48px",
+    "height:48px",
+    "border-radius:8px",
+    "object-fit:cover",
+    "box-shadow:0 4px 12px rgba(0,0,0,.35)",
+    "pointer-events:none",
+    "background:#222",
+    "flex-shrink:0"
+  ].join(";");
+
+  function setupAvatar() {
+    const rel = PERSONA_IMG[personaId] || PERSONA_IMG["robert"];
+    avatar.src = chrome.runtime.getURL(rel);
+  }
+  setupAvatar();
+
+  const btn = document.createElement("button");
+  btn.textContent = "Generate TTS";
+  btn.style.cssText = [
+    "flex:1",
+    "padding:8px 10px",
+    "border:0",
+    "border-radius:8px",
+    "background:#2a2a2a",
+    "color:#fff",
+    "cursor:pointer",
+    "text-align:center",
+    "line-height:1.2"
+  ].join(";");
+
+  box.appendChild(avatar);
+  box.appendChild(btn);
+
+  document.documentElement.appendChild(box);
+
+  // drag and drop mini-boxa
+  let drag = false, sx = 0, sy = 0, st = 0, sl = 0;
+  box.addEventListener("mousedown", e => {
+    const t = e.target.tagName;
+    if (t === "BUTTON" || t === "INPUT") return;
+    drag = true;
+    sx = e.clientX;
+    sy = e.clientY;
+    const r = box.getBoundingClientRect();
+    st = r.top;
+    sl = r.left;
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp, { once:true });
+    e.preventDefault();
+  });
+  function onMove(e) {
+    if (!drag) return;
+    const dx = e.clientX - sx;
+    const dy = e.clientY - sy;
+    box.style.top  = Math.max(8, st + dy) + "px";
+    box.style.left = Math.max(8, sl + dx) + "px";
+    box.style.right = "";
+    box.style.bottom = "";
+  }
+  function onUp() {
+    drag = false;
+    document.removeEventListener("mousemove", onMove);
+  }
+
+  // kliknięcie Generate TTS
+  btn.addEventListener("click", async () => {
+    btn.textContent = "Generuję...";
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // DEBUG LIMIT: wysyłamy tylko pierwsze 2 zdania, żeby nie palić tokenów
+    // BIERZEMY fullTextForTTS, tnij po kropce, zlep z powrotem dwa pierwsze zdania
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    const sentences = fullTextForTTS
+      .split(/(?<=[\.!\?])\s+/)        // tnij po końcach zdań
+      .slice(0, 2)                      // bierz max 2 zdania
+      .join(" ");                       // złóż z powrotem
+
+    // możesz dodać speed jeżeli chcesz
+    const url = await requestTTS(sentences, personaId);
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // małe okienko już niepotrzebne
+    box.remove();
+
+    // uruchamiamy duży player z player.js
+    if (typeof window.player === "function") {
+      window.player(url, personaId);
+    }
+  });
 }

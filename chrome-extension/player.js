@@ -1,14 +1,14 @@
-function player() {
+window.player = function initPlayer(audioUrl, personaIdInit) {
   if (window.__mini_audio_player__) return;
   window.__mini_audio_player__ = true;
-
-  const AUDIO_URL = chrome.runtime.getURL("personas/tmp.mp3");
 
   const PERSONA_IMG = {
     "robert": "personas/robert.png",
     "kapitan-bomba": "personas/bomba.png",
     "yoda": "personas/yoda.png"
   };
+
+  let personaId = personaIdInit || "robert";
 
   const wrap = document.createElement("div");
   wrap.style.cssText = [
@@ -50,6 +50,12 @@ function player() {
     "pointer-events:none",
     "background:#222"
   ].join(";");
+
+  function setAvatarByPersona(id) {
+    const rel = PERSONA_IMG[id] || PERSONA_IMG["robert"];
+    avatar.src = chrome.runtime.getURL(rel);
+  }
+  setAvatarByPersona(personaId);
 
   const controls = document.createElement("div");
 
@@ -95,32 +101,17 @@ function player() {
   document.documentElement.appendChild(wrap);
 
   const audio = document.createElement("audio");
-  audio.src = AUDIO_URL;
+  audio.src = audioUrl;
   audio.preload = "auto";
   audio.style.display = "none";
   document.documentElement.appendChild(audio);
 
+  // po wstawieniu od razu ustawiamy wrap w prawym dolnym rogu, ale umożliwiamy przesuwanie
   const r0 = wrap.getBoundingClientRect();
   wrap.style.right = "";
   wrap.style.bottom = "";
   wrap.style.left = Math.max(8, window.innerWidth - r0.width - 16) + "px";
   wrap.style.top  = Math.max(8, window.innerHeight - r0.height - 16) + "px";
-
-  function setAvatarByPersona(id) {
-    const rel = PERSONA_IMG[id] || PERSONA_IMG["robert"];
-    avatar.src = chrome.runtime.getURL(rel);
-  }
-
-  try {
-    const maybePromise = chrome.storage.sync.get(["persona_id"]);
-    if (maybePromise && typeof maybePromise.then === "function") {
-      maybePromise.then(v => setAvatarByPersona(v.persona_id));
-    } else {
-      chrome.storage.sync.get(["persona_id"], v => setAvatarByPersona(v.persona_id));
-    }
-  } catch {
-    setAvatarByPersona("robert");
-  }
 
   function fmt(t) {
     if (!isFinite(t) || t < 0) t = 0;
@@ -128,29 +119,47 @@ function player() {
     const s = Math.floor(t % 60);
     return String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
   }
+
   function syncUI() {
     const dur = isFinite(audio.duration) ? audio.duration : 0;
     time.textContent = fmt(audio.currentTime) + " / " + fmt(dur);
-    if (dur > 0) seek.value = String(Math.round(audio.currentTime / dur * 1000));
+    if (dur > 0) {
+      seek.value = String(Math.round(audio.currentTime / dur * 1000));
+    }
     btnPlay.textContent = audio.paused ? "Play" : "Pauza";
   }
 
-  btnPlay.onclick = () => { audio.paused ? audio.play() : audio.pause(); syncUI(); };
-  btnBack.onclick = () => { audio.currentTime = Math.max(0, audio.currentTime - 5); };
+  btnPlay.onclick = () => {
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+    syncUI();
+  };
+
+  btnBack.onclick = () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 5);
+  };
+
   btnFwd.onclick  = () => {
     const dur = isFinite(audio.duration) ? audio.duration : 0;
     audio.currentTime = dur > 0 ? Math.min(dur, audio.currentTime + 5) : audio.currentTime;
   };
+
   seek.oninput = () => {
     const dur = isFinite(audio.duration) ? audio.duration : 0;
-    if (dur > 0) audio.currentTime = Number(seek.value) / 1000 * dur;
+    if (dur > 0) {
+      audio.currentTime = Number(seek.value) / 1000 * dur;
+    }
   };
 
   audio.onloadedmetadata = syncUI;
   audio.ontimeupdate = syncUI;
   audio.onplay = syncUI;
   audio.onpause = syncUI;
-  audio.onerror = () => console.error("Audio load error", audio.error, AUDIO_URL);
+  audio.onerror = () => console.error("Audio load error", audio.error, audioUrl);
+
   avatar.addEventListener("error", () => console.error("Image load error", avatar.src));
 
   let drag = false, sx = 0, sy = 0, st = 0, sl = 0;
@@ -167,6 +176,7 @@ function player() {
     document.addEventListener("mouseup", onUp, { once:true });
     e.preventDefault();
   });
+
   function onMove(e) {
     if (!drag) return;
     const dx = e.clientX - sx;
@@ -174,8 +184,9 @@ function player() {
     wrap.style.top  = Math.max(8, st + dy) + "px";
     wrap.style.left = Math.max(8, sl + dx) + "px";
   }
+
   function onUp() {
     drag = false;
     document.removeEventListener("mousemove", onMove);
   }
-}
+};
