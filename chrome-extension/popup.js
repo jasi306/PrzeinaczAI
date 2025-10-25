@@ -1,14 +1,8 @@
 // Fixed personas (bez ustawień użytkownika)
 const PERSONAS = [
-<<<<<<< HEAD
-  { id: "geralt",        name: "Geralt z Rivii", img: "personas/geralt.png" },
-  { id: "robert",          name: "Robert Makłowicz", img: "personas/robert.png"   }, // id ujednolicone: "robert"
-  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png"  }
-=======
-  { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" , desc: "Dodawaj angedoty i ciekawostki historyczne, mów z pasją o jedzeniu i kulturze." },
-  { id: "joda",          name: "Yoda",             img: "personas/yoda.png", desc: "Buduj mniej ale dluzsze zdan. Nie przeklinaj. Nawiazuj do uniwersum Star Wars - do innych postaci i wydarzen." }, // id ujednolicone: "joda"
-  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png", desc: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki."  }
->>>>>>> def0706844422caf3a4d2792d85df7457ab04671
+  { id: "geralt",        name: "Geralt z Rivii", img: "personas/geralt.png", desc: "Mów oszczędnie, rzeczowo i z lekką szorstkością, używaj suchych komentarzy i sarkazmu, mów jak ktoś, kto widział zbyt wiele i nie ma złudzeń. Wtrąć czasem \"zaraza\"." }, // id ujednolicone: "geralt"
+  { id: "robert",          name: "Robert Makłowicz", img: "personas/robert.png", desc: "Dodawaj angedoty i ciekawostki historyczne, mów z pasją o jedzeniu i kulturze." }, // id ujednolicone: "robert"
+  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png", desc: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki." }
 ];
 
 const grid = document.getElementById("grid");
