@@ -30,14 +30,14 @@ app.add_middleware(
 # =====================================================================
 
 VOICES = {
-    "kapitan-bomba": {
-        "voice_id": "8Gg9X8A0A0WIZ08saHS5",
+    "geralt": {
+        "voice_id": "0zMIfPaPiC1cQkyeuau6",
         "voice_settings": {
-            "stability": 0.75,
-            "similarity_boost": 0.35,
+            "stability": 0.5,
+            "similarity_boost": 0.8,
             "style": 0.8,
             "use_speaker_boost": True,
-            "speed": 1.0
+            "speed": 0.85
         },
         # 13% speaker boost z interfejsu zapisane tutaj jako True
     },
@@ -100,7 +100,7 @@ async def create_item(item: Item):
 
 class TTSRequest(BaseModel):
     text: str
-    preset: str        # np. "kapitan-bomba", "robert", "yoda"
+    preset: str        # np. "kapitan-bomba", "robert", "geralt"
     model_id: str | None = "eleven_multilingual_v2"
 
 @app.post("/tts/")
@@ -152,7 +152,6 @@ async def tts_generate(req: TTSRequest):
     return {
         "file_name": file_name,
         "download_url": f"/tts/{file_name}",
-        # trochę info diagnostycznego dla frontu
         "debug_status": r.status_code,
         "debug_content_type": r.headers.get("Content-Type", "no-header"),
         "debug_len": len(audio_bytes),

@@ -1,7 +1,7 @@
 // Fixed personas (bez ustawień użytkownika)
 const PERSONAS = [
-  { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" },
-  { id: "joda",          name: "Yoda",             img: "personas/yoda.png"   }, // id ujednolicone: "joda"
+  { id: "geralt",        name: "Geralt z Rivii", img: "personas/geralt.png" },
+  { id: "robert",          name: "Robert Makłowicz", img: "personas/robert.png"   }, // id ujednolicone: "robert"
   { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png"  }
 ];
 

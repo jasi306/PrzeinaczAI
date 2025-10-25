@@ -3,12 +3,12 @@ window.player = function initPlayer(audioUrl, personaIdInit) {
   window.__mini_audio_player__ = true;
 
   const PERSONA_IMG = {
+    "geralt": "personas/geralt.png",
     "robert": "personas/robert.png",
-    "kapitan-bomba": "personas/bomba.png",
-    "yoda": "personas/yoda.png"
+    "kapitan-bomba": "personas/bomba.png"
   };
 
-  let personaId = personaIdInit || "robert";
+  let personaId = personaIdInit || "geralt";
 
   const wrap = document.createElement("div");
   wrap.style.cssText = [
@@ -52,7 +52,7 @@ window.player = function initPlayer(audioUrl, personaIdInit) {
   ].join(";");
 
   function setAvatarByPersona(id) {
-    const rel = PERSONA_IMG[id] || PERSONA_IMG["robert"];
+    const rel = PERSONA_IMG[id] || PERSONA_IMG["geralt"];
     avatar.src = chrome.runtime.getURL(rel);
   }
   setAvatarByPersona(personaId);

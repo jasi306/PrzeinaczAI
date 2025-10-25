@@ -145,6 +145,7 @@ async function insertNewHeader(generated_text) {
   const header = document.querySelector("h1");
   if (!header) {
     console.error("⚠️ No <h1> element found to insert the new header above. ⚠️");
+    // alert("⚠️ Nie znaleziono elementu <h1> do wstawienia nagłówka. ⚠️");
     return;
   }
 
@@ -324,9 +325,9 @@ function createGenerateWidget(fullTextForTTS) {
   }
 
   const PERSONA_IMG = {
+    "geralt": "personas/geralt.png",
     "robert": "personas/robert.png",
-    "kapitan-bomba": "personas/bomba.png",
-    "yoda": "personas/yoda.png"
+    "kapitan-bomba": "personas/bomba.png"
   };
 
   const box = document.createElement("div");
@@ -363,7 +364,7 @@ function createGenerateWidget(fullTextForTTS) {
   ].join(";");
 
   function setupAvatar() {
-    const rel = PERSONA_IMG[personaId] || PERSONA_IMG["robert"];
+    const rel = PERSONA_IMG[personaId] || PERSONA_IMG["geralt"];
     avatar.src = chrome.runtime.getURL(rel);
   }
   // pierwsze ustawienie
