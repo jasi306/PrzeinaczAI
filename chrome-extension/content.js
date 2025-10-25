@@ -18,7 +18,7 @@ const shadow = "0 8px 24px rgba(2,6,23,.08)";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "RUN_EXTRACTION") {
-    extractAndSendArticle(message.persona, message.absurd_level);
+    extractAndSendArticle(message.persona, message.absurd_level, message.desc);
     sendResponse({ status: "Extraction started" });
   }
   return true;
@@ -34,7 +34,11 @@ function cacheKey(url, persona, absurd_level) {
 }
 
 function doesCachedValueExist(url, persona, absurd_level) {
-  return sessionStorage.getItem(cacheKey(url, persona, absurd_level)) !== null;
+  if (sessionStorage.getItem(cacheKey(url, persona, absurd_level))) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getCachedValue(url, persona, absurd_level) {
@@ -55,7 +59,7 @@ async function getPersonaResponse(article, persona, absurd_level, personaDescrip
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      title: article.title,
+      //title: article.title,
       persona: persona,
       absurd_level: absurd_level,
       personaDescription: personaDescription,
@@ -63,10 +67,10 @@ async function getPersonaResponse(article, persona, absurd_level, personaDescrip
     })
   });
 
-  if (!response.ok) {
-    console.error("❌ Server responded with an error:", response.status, response.statusText);
-    return "";
-  }
+  // if (!response.ok) {
+  //   console.error("❌ Server responded with an error:", response.status, response.statusText);
+  //   return "";
+  // }
 
   const result = await response.json();
   return result.msg;
@@ -96,7 +100,7 @@ async function requestTTS(text, preset, speed) {
 // Główny flow na stronie
 // =====================
 
-async function extractAndSendArticle(persona, absurd_level) {
+async function extractAndSendArticle(persona, absurd_level, desc) {
   // 1. ekstrakcja artykułu
   const clone = document.cloneNode(true);
   const reader = new Readability(clone);
@@ -116,18 +120,16 @@ async function extractAndSendArticle(persona, absurd_level) {
       article,
       persona,
       absurd_level,
-      "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki."
+      desc
     );
+    alert(desc);
     setCachedValue(window.location.href, persona, absurd_level, transformedText);
   }
 
-  if (!transformedText || typeof transformedText !== "string") {
+  if (!transformedText) {
     console.error("⚠️ No transformed text received from backend. ⚠️");
     return;
   }
-
-  // 3. podmień zawartość artykułu na stronie
-  replaceArticleBody(transformedText);
 
   // 4. pokaż banner nad <h1>
   insertNewHeader(transformedText);
@@ -451,8 +453,8 @@ function createGenerateWidget(fullTextForTTS) {
 // Auto-start na load strony
 // =====================
 // Jeśli chcesz tylko przez popup, usuń ten blok
-window.addEventListener("load", () => {
-  const defaultPersona = "kapitan-bomba";
-  const defaultAbsurd = 5;
-  extractAndSendArticle(defaultPersona, defaultAbsurd);
-});
+// window.addEventListener("load", () => {
+//   const defaultPersona = "kapitan-bomba";
+//   const defaultAbsurd = 5;
+//   extractAndSendArticle(defaultPersona, defaultAbsurd);
+// });
