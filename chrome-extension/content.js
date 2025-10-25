@@ -122,7 +122,7 @@ async function extractAndSendArticle(persona, absurd_level, desc) {
       absurd_level,
       desc
     );
-    alert(desc);
+    // alert(desc);
     setCachedValue(window.location.href, persona, absurd_level, transformedText);
   }
 
@@ -428,13 +428,7 @@ function createGenerateWidget(fullTextForTTS) {
     btn.disabled = true;
     btn.style.opacity = "0.6";
 
-    // bierzemy tylko 2 pierwsze zdania żeby nie lać kilometrowego TTS
-    const sentences = fullTextForTTS
-      .split(/(?<=[\.!\?])\s+/)
-      .slice(0, 2)
-      .join(" ");
-
-    const url = await requestTTS(sentences, personaId);
+    const url = await requestTTS(fullTextForTTS, personaId);
 
     // chowamy widget po kliknięciu
     box.remove();

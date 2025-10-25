@@ -37,7 +37,7 @@ VOICES = {
             "similarity_boost": 0.8,
             "style": 0.8,
             "use_speaker_boost": True,
-            "speed": 0.85
+            "speed": 0.7
         },
         # 13% speaker boost z interfejsu zapisane tutaj jako True
     },
@@ -53,7 +53,7 @@ VOICES = {
         }
     },
 
-    "joda": {
+    "kapitan-bomba": {
         "voice_id": "8Gg9X8A0A0WIZ08saHS5",
         "voice_settings": {
             "stability": 0.75,
