@@ -5,7 +5,7 @@ const PERSONAS = [
   { id: "yoda",          name: "Yoda",              img: "personas/yoda.png", desc: "Mów w sposób zagadkowy, używaj krótkich zdań i często powtarzaj kluczowe frazy. Nawiązuj do kontekstu Gwiezdnych Wojen." },
   { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png", desc: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki." },
   { id: "ferdynant",     name: "Ferdynand Kiepski", img: "personas/ferdynant.png", desc: "Mów z lekko zblazowanym tonem. Używaj charakterystycznych fraz." },
-  { id: "bugs",          name: "Królik Bugs",       img: "personas/bugs.png", desc: "Bądź dowcipny i sarkastyczny, używaj gier słownych i odniesień do popkultury." },
+  { id: "bugs",          name: "Królik Bugs",       img: "personas/bugs.png", desc: "Bądź dowcipny i sarkastyczny, używaj gier słownych i odniesień do popkultury. Zaczynaj wypowiedzi od \"Hej doktorku!\"." },
 ];
 
 const grid        = document.getElementById("grid");
