@@ -21,8 +21,7 @@
 /* 3) Tytuł – ZAWSZE czytelny na jasnym */
 .title h1{
   margin:0; font-size:14px; font-weight:800; letter-spacing:.2px;
-  color:var(--text);                 /* stały ciemny kolor */
-  /* dodatkowa czytelność, gdy header ma wzorek: */
+  color:var(--text);
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
 .title p{ color:var(--muted); }
@@ -31,25 +30,25 @@
 .card{
   border:1px solid var(--border);
   border-radius:12px;
-  background:#fff;                   /* białe tło */
+  background:#fff;
   box-shadow: var(--shadow);
 }
 .card img{
   display:block; width:100%; height:72px; object-fit:cover;
-  background:#f3f4f6;                /* jasne tło, gdy obrazek ma przezroczystość */
+  background:#f3f4f6;
 }
 
 /* 5) Aktywna karta – delikatny ring, bez przyciemniania */
 .card.active{
-  border-color: #c7d2fe;             /* jaśniejszy odcień ringa */
+  border-color: #c7d2fe;
   box-shadow: 0 0 0 2px #e0e7ff inset, var(--shadow);
 }
 
 /* 6) Badge obok suwaka – lepszy kontrast na jasnym */
 .badge{
-  background:#eef2ff;                /* jasny fiolet */
+  background:#eef2ff;
   border:1px solid #c7d2fe;
-  color:#3730a3;                      /* ciemniejszy tekst */
+  color:#3730a3;
 }
 
 /* 7) Przycisk – mocniejszy kontrast */
@@ -60,7 +59,6 @@
 
 /* (opcjonalnie) wyłącz dark-mode, jeśli przeszkadza */
 @media (prefers-color-scheme: dark){ :root{ /* nic nie nadpisujemy */ } }
-
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
