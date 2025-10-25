@@ -59,7 +59,7 @@ async function getPersonaResponse(article, persona, absurd_level, personaDescrip
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      title: article.title,
+      //title: article.title,
       persona: persona,
       absurd_level: absurd_level,
       personaDescription: personaDescription,

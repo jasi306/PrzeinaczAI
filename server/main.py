@@ -77,7 +77,7 @@ ELEVEN_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 # =====================================================================
 
 class Item(BaseModel):
-    title: str
+    #title: str
     persona: str
     absurd_level: int
     personaDescription: str

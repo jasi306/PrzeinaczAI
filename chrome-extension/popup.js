@@ -1,7 +1,7 @@
 // Fixed personas (bez ustawień użytkownika)
 const PERSONAS = [
   { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" , desc: "Dodawaj angedoty i ciekawostki historyczne, mów z pasją o jedzeniu i kulturze." },
-  { id: "joda",          name: "Yoda",             img: "personas/yoda.png", desc: "Mow tak jak Yoda ze Clone Wars. Buduj mniej ale dluzszych zdan. Nawiazuj do uniwersum Star Wars - do innych postaci i wydarzen." }, // id ujednolicone: "joda"
+  { id: "joda",          name: "Yoda",             img: "personas/yoda.png", desc: "Buduj mniej ale dluzsze zdan. Nie przeklinaj. Nawiazuj do uniwersum Star Wars - do innych postaci i wydarzen." }, // id ujednolicone: "joda"
   { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png", desc: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki."  }
 ];
 
