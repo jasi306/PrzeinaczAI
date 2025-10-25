@@ -41,3 +41,17 @@ async function extractAndSendArticle() {
     console.error("❌ Error while parsing or sending article:", err);
   }
 }
+
+fetch('http://127.0.0.1:8000/prompt/?msg="zwroc mi cytat kapitana bomby"')
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((data) => {
+    console.log('Data fetched:', data.msg);
+  })
+  .catch((error) => {
+    console.error('Fetch error:', error);
+  });
