@@ -2,20 +2,28 @@
   "name": "PrzeinaczAI",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Loguje hello-world i robi minimalne zapytanie do GPT.",
+  "description": "Rozszerzenie przeinacza artykuły na bardziej Makłowiczowe za pomocą AI.",
   "host_permissions": ["https://api.openai.com/*"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["libs/Readability.js", "content.js"],
+      "js": ["content.js"],
       "run_at": "document_start"
     }
   ],
+    "icons": {
+    "16": "icons/p.png",
+    "48": "icons/p.png",
+    "128": "icons/p.png"
+  },
   "action": {
   "default_popup": "popup.html",
-  "default_title": "PrzeinaczAI"
+  "default_title": "PrzeinaczAI",
+      "default_icon": {
+      "16": "icons/p.png",
+      "48": "icons/p.png"
+    }
 },
   "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
-  "background": { "service_worker": "background.js" },
-  "options_page": "options.html"
+  "background": { "service_worker": "background.js" }
 }
