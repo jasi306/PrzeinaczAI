@@ -2,14 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
-from openai import OpenAI
+from pydantic import BaseModel
+from google import genai
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
-
+client = genai.Client()
 
 app = FastAPI()
 
@@ -25,16 +23,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/prompt/")
-async def get_message(msg: str):
-    response = client.responses.create(
-        model="gpt-4o-mini",
-        instructions="Jesteś zwięzły i precyzyjny.",
-        input=f"{msg}",
-    )
-    print(response)
-    return {"msg": f"ChatGPT powiedzial: {response.output_text}"}
+class Item(BaseModel):
+    title: str
+    persona: str
+    personaDescription: str
+    textContent: str
+    # url: str
+    # excerpt: str
+    # htmlContent: str
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+@app.post("/text/")
+async def create_item(item: Item):
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=f"Przepisz tekst w stylu {item.persona}. Nie dodawaj komentarzy ani wyjaśnień. Zachowaj spójność, i płynność oryginalnego tekstu. Dodaj <br> w odpowiednich miejscach. Tekst: {item.textContent}",
+    )
+    return {"msg": f"{response.text}"}
+    
