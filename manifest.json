@@ -1,5 +1,5 @@
 {
-  "name": "Hello World GPT POC",
+  "name": "PrzeinaczAI",
   "version": "1.0.0",
   "manifest_version": 3,
   "description": "Loguje hello-world i robi minimalne zapytanie do GPT.",
@@ -10,5 +10,12 @@
       "js": ["libs/Readability.js", "content.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "action": {
+  "default_popup": "popup.html",
+  "default_title": "PrzeinaczAI"
+},
+  "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
+  "background": { "service_worker": "background.js" },
+  "options_page": "options.html"
 }

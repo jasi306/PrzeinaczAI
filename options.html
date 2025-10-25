@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Przeinacz – Ustawienia</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 16px; max-width: 720px; }
+    h2 { margin: 0 0 12px; }
+    fieldset { border: 1px solid #e5e5e5; border-radius: 10px; padding: 12px; margin: 12px 0; }
+    label { display:block; font-size:12px; color:#555; margin: 6px 0 3px; }
+    input, textarea { width:100%; padding:8px; border:1px solid #ddd; border-radius:8px; }
+    button { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer;}
+    .row { display:flex; gap:10px; }
+    .row > * { flex:1; }
+    .persona-item { display:flex; gap:8px; align-items:center; padding:8px; border:1px solid #eee; border-radius:8px; }
+    .persona-item strong { flex:1; }
+    .note { color:#666; font-size:12px; }
+  </style>
+</head>
+<body>
+  <h2>Przeinacz – Ustawienia</h2>
+
+  <fieldset>
+    <legend>Ogólne</legend>
+    <div class="row">
+      <div>
+        <label>Auto-przeinaczanie na stronach</label>
+        <input type="checkbox" id="autoMode">
+      </div>
+      <div>
+        <label>Endpoint API (opcjonalnie)</label>
+        <input id="endpoint" placeholder="https://twoje-api/transform">
+        <div class="note">Zostaw puste, jeśli na razie nie łączysz z backendem.</div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Persony</legend>
+    <div id="personasList"></div>
+    <h4>Dodaj / Edytuj</h4>
+    <div class="row">
+      <div>
+        <label>ID</label>
+        <input id="p_id" placeholder="np. kapitan-bomba">
+      </div>
+      <div>
+        <label>Nazwa</label>
+        <input id="p_name" placeholder="np. Kapitan Bomba">
+      </div>
+    </div>
+    <label>System prompt (styl)</label>
+    <textarea id="p_system" rows="3" placeholder="Krótki opis stylu persony…"></textarea>
+    <label>Wskazówki stylu (opcjonalnie)</label>
+    <textarea id="p_hint" rows="2" placeholder="Dodatkowe wskazówki…"></textarea>
+
+    <div class="row" style="margin-top:8px">
+      <button id="savePersona">Zapisz personę</button>
+      <button id="clearPersona">Wyczyść formularz</button>
+      <button id="resetDefaults">Przywróć domyślne</button>
+    </div>
+    <div class="note" id="msg"></div>
+  </fieldset>
+
+  <script src="options.js"></script>
+</body>
+</html>
