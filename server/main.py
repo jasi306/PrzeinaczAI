@@ -26,6 +26,7 @@ app.add_middleware(
 class Item(BaseModel):
     title: str
     persona: str
+    absurd_level: int
     personaDescription: str
     textContent: str
     # url: str
@@ -39,15 +40,5 @@ async def create_item(item: Item):
     #     contents=f"Przepisz tekst w stylu {item.persona}. Nie dodawaj komentarzy ani wyjaśnień. Zachowaj spójność, i płynność oryginalnego tekstu. Dodaj <br> w odpowiednich miejscach. Tekst: {item.textContent}",
     # )
     # return {"msg": f"{response.text}"}
-    placeholder = """   Piasek, ten pozornie niewyczerpany towar, zaczyna nam się kończyć, kurde!
-                        A przecież z tego gówna robią drogi, chałupy i te wszystkie graty, co ich używamy na co dzień.
-                        Jak będziemy go tak zarzynać, to będą jaja.
-
-                        W miastach i na plażach już teraz dochodzi do zadym, bo się kłócą o to, kto ten piasek wywlecze i gdzie go załaduje.
-                        Jak lokalne łóżko rzeki pustoszeje, to trzeba lecieć po piach na drugi koniec świata.
-                        A to kosztuje i środowisko dostaje po dupie.
-
-                        Trzeba by zacząć myśleć, kurde, lepiej.
-                        Recykling tego, co już zbudowaliśmy, i szukanie jakichś zamienników.
-                        Bo jak ten piach naprawdę się skończy, to nasze przyszłe projekty mogą zostać w pizdu."""
+    placeholder = f"{item.persona} (Absurd level: {item.absurd_level}): {item.textContent}"
     return {"msg": f"{placeholder}"}

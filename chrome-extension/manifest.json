@@ -17,7 +17,7 @@
       "48": "icons/p.png"
     }
   },
-  "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
+  "permissions": ["storage", "contextMenus", "activeTab", "scripting", "tabs"],
   "background": { "service_worker": "background.js" },
   "content_scripts": [
     {

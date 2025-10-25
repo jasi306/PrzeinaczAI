@@ -84,9 +84,9 @@ async function onApply() {
     absurd_level: level
   });
 
-  // opcjonalnie: powiadom resztę rozszerzenia
-  chrome.runtime.sendMessage({
-    type: "APPLY_SETTINGS",
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  await chrome.tabs.sendMessage(tab.id, {
+    type: "RUN_EXTRACTION",
     persona: currentPersonaId,
     absurd_level: level
   });
