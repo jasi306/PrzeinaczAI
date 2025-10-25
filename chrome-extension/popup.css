@@ -1,0 +1,189 @@
+/* 1) Ogólny jasny look */
+:root{
+  --surface:#ffffff;
+  --text:#111827;         /* ciemny tekst */
+  --muted:#6b7280;
+  --ring:#6366f1;
+  --accent:#7c3aed;
+  --accent2:#22d3ee;
+  --border:#e5e7eb;
+  --shadow:0 8px 24px rgba(2,6,23,.08);
+}
+
+/* 2) Header – jasny, bez przyciemniania */
+.hdr{
+  background:
+    radial-gradient(160px 120px at -10% -40%, #7c3aed20, transparent 70%),
+    radial-gradient(180px 140px at 110% -50%, #22d3ee20, transparent 70%);
+  border-bottom:1px solid var(--border);
+}
+
+/* 3) Tytuł – ZAWSZE czytelny na jasnym */
+.title h1{
+  margin:0; font-size:14px; font-weight:800; letter-spacing:.2px;
+  color:var(--text);                 /* stały ciemny kolor */
+  /* dodatkowa czytelność, gdy header ma wzorek: */
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+.title p{ color:var(--muted); }
+
+/* 4) Karty – jasne tło, zero czerni pod obrazkiem */
+.card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fff;                   /* białe tło */
+  box-shadow: var(--shadow);
+}
+.card img{
+  display:block; width:100%; height:72px; object-fit:cover;
+  background:#f3f4f6;                /* jasne tło, gdy obrazek ma przezroczystość */
+}
+
+/* 5) Aktywna karta – delikatny ring, bez przyciemniania */
+.card.active{
+  border-color: #c7d2fe;             /* jaśniejszy odcień ringa */
+  box-shadow: 0 0 0 2px #e0e7ff inset, var(--shadow);
+}
+
+/* 6) Badge obok suwaka – lepszy kontrast na jasnym */
+.badge{
+  background:#eef2ff;                /* jasny fiolet */
+  border:1px solid #c7d2fe;
+  color:#3730a3;                      /* ciemniejszy tekst */
+}
+
+/* 7) Przycisk – mocniejszy kontrast */
+.btn{
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  color:#fff; border:0;
+}
+
+/* (opcjonalnie) wyłącz dark-mode, jeśli przeszkadza */
+@media (prefers-color-scheme: dark){ :root{ /* nic nie nadpisujemy */ } }
+
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  width:320px;
+  font:14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
+  background:linear-gradient(180deg, #fafafa, #fff) no-repeat;
+}
+
+/* Header */
+.hdr{
+  display:flex; gap:10px; align-items:center;
+  padding:12px 12px 10px;
+  background:
+    radial-gradient(120px 80px at -10% -30%, var(--accent)/.25, transparent 70%),
+    radial-gradient(140px 100px at 110% -40%, var(--accent2)/.25, transparent 70%);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  width:34px; height:34px; border-radius:10px;
+  display:grid; place-items:center;
+  color:#fff; font-weight:800;
+  background: conic-gradient(from 210deg, var(--accent), var(--accent2));
+  box-shadow: var(--shadow);
+}
+.title h1{
+  margin:0; font-size:14px; font-weight:700; letter-spacing:.2px;
+}
+.title p{
+  margin:2px 0 0; color:var(--muted); font-size:12px;
+}
+
+/* Wrapper */
+.wrap{ padding:12px; display:grid; gap:12px; }
+
+/* Section titles */
+h2{
+  margin:0 0 8px;
+  font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--muted);
+}
+
+/* Persona grid */
+.grid{
+  display:grid; gap:10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--surface);
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow: var(--shadow);
+  transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
+  outline: none;
+}
+.card:hover{ transform: translateY(-1px); }
+.card:focus-visible{ box-shadow:0 0 0 2px var(--ring); }
+.card img{
+  display:block; width:100%; height:72px; object-fit:cover;
+}
+.card .name{
+  padding:6px 6px 8px;
+  font-size:12px; text-align:center;
+}
+.card.active{
+  border-color: color-mix(in srgb, var(--ring) 60%, var(--border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 40%, transparent) inset, var(--shadow);
+}
+
+/* Slider */
+.slider{ display:grid; gap:8px; }
+.row{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.badge{
+  font-size:12px; padding:4px 8px; border-radius:999px;
+  background: color-mix(in srgb, var(--ring) 18%, transparent);
+  border:1px solid color-mix(in srgb, var(--ring) 35%, var(--border));
+}
+.range{ display:grid; gap:6px; }
+#absurd{
+  width:100%;
+  -webkit-appearance:none; appearance:none;
+  height:6px; border-radius:999px;
+  background:linear-gradient(90deg, var(--accent), var(--accent2));
+  outline:none;
+}
+#absurd::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:18px; height:18px; border-radius:50%;
+  background:#fff;
+  border:2px solid color-mix(in srgb, var(--ring) 70%, #fff);
+  box-shadow: var(--shadow);
+}
+#absurd::-moz-range-thumb{
+  width:18px; height:18px; border-radius:50%;
+  background:#fff; border:2px solid var(--ring);
+}
+.ticks{
+  display:flex; justify-content:space-between;
+  color:var(--muted); font-size:11px;
+}
+
+/* Footer */
+.ftr{
+  display:flex; justify-content:center;
+  border-top:1px solid var(--border);
+  padding:10px 12px;
+  background:linear-gradient(180deg, transparent, rgba(0,0,0,.02));
+}
+.btn{
+  width:100%;
+  padding:10px 12px; border-radius:10px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  color:#fff; border:0; font-weight:600; letter-spacing:.2px;
+  box-shadow: var(--shadow); cursor:pointer;
+}
+.btn:focus-visible{ outline:2px solid var(--ring); outline-offset:2px; }
+
+/* Status toast */
+.status{
+  position:fixed; bottom:10px; left:12px; right:12px;
+  display:block; text-align:center;
+  color:var(--muted);
+}

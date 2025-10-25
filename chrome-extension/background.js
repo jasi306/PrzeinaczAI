@@ -28,3 +28,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const personaId = info.menuItemId.replace("przeinacz_", "");
   chrome.tabs.sendMessage(tab.id, { type: "RUN_TRANSFORM", personaId, text: info.selectionText });
 });
+
+// // Gdzie budujesz prompt/parametry:
+// const { absurd_level = 50, persona_id = "robert" } = await chrome.storage.sync.get(["absurd_level", "persona_id"]);
+
+// // Np. przełóż absurd_level (0–100) na temperature (0–1):
+// const temperature = Math.min(1, Math.max(0, absurd_level / 100));
+
+// // Możesz też zbudować wskazówkę stylu:
+// const absurdHint =
+//   absurd_level < 25 ? "Minimalne przerysowanie, bardziej faktograficznie." :
+//   absurd_level < 50 ? "Lekka ironia i metafory oszczędnie." :
+//   absurd_level < 75 ? "Wyraźne przerysowanie i humor, ale czytelnie." :
+//                       "Mocny absurd i żart, skracaj i pointuj.";

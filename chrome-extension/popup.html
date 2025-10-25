@@ -1,23 +1,45 @@
 <!doctype html>
-<html>
+<html lang="pl">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>PrzeinaczAI</title>
-  <style>
-    body { font-family: system-ui, sans-serif; margin:12px; width:300px; }
-    h3 { margin:0 0 10px; }
-    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-    .card { border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; cursor:pointer; background:#fff; }
-    .card img { display:block; width:100%; height:72px; object-fit:cover; }
-    .card .name { font-size:12px; text-align:center; padding:6px 4px; }
-    .card.active { border-color:#6366f1; box-shadow:0 0 0 2px #6366f133 inset; }
-    small { display:block; margin-top:8px; color:#6b7280; }
-  </style>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <h3>Przeinaczacz:</h3>
-  <div id="grid" class="grid"></div>
-  <small id="status"></small>
+  <header class="hdr">
+    <div class="logo">P</div>
+    <div class="title">
+      <h1>PrzeinaczAI</h1>
+      <p>Wybierz postać i poziom absurdu</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Postać</h2>
+      <div id="grid" class="grid" role="listbox" aria-label="Wybór postaci"></div>
+    </section>
+
+    <section class="slider">
+      <div class="row">
+        <h2>Poziom absurdu</h2>
+        <span id="absurdLabel" class="badge">Prawie serio (1)</span>
+      </div>
+
+      <div class="range">
+        <input id="absurd" type="range" min="1" max="5" step="1" />
+        <div class="ticks">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ftr">
+    <button id="apply" class="btn">Zastosuj</button>
+  </footer>
+
+  <small id="status" class="status" aria-live="polite"></small>
   <script src="popup.js"></script>
 </body>
 </html>

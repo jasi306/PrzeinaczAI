@@ -34,3 +34,22 @@ fetch('http://127.0.0.1:8000/prompt/?msg="zwroc mi cytat kapitana bomby"')
   .catch((error) => {
     console.error('Fetch error:', error);
   });
+
+
+//   async function getStyleConfig() {
+//   const { absurd_level = 50, persona_id = "robert" } = await chrome.storage.sync.get(["absurd_level", "persona_id"]);
+//   return { absurd_level, persona_id };
+// }
+
+absurdInput.addEventListener("input", async () => {
+  const val = Number(absurdInput.value);
+  await chrome.storage.sync.set({ absurd_level: val });
+});
+
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", async () => {
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+    await chrome.storage.sync.set({ persona: card.dataset.id });
+  });
+});

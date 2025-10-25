@@ -2,7 +2,7 @@
   "name": "PrzeinaczAI",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Rozszerzenie przeinacza artykuły na bardziej Makłowiczowe za pomocą AI.",
+  "description": "Rozszerzenie przeinacza artykuły w dowolnym stylu od Makłowicza po Kapitana Bombę, aby uczynić Twój dzień lepszym.",
   "host_permissions": ["https://api.openai.com/*"],
     "icons": {
     "16": "icons/p.png",
