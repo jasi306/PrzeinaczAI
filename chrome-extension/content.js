@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 
-async function getPersonaResponse(article, persona, personaDescription){
+async function getPersonaResponse(article, persona, absurd_level, personaDescription){
   const response = await fetch("http://localhost:8000/text/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -50,6 +50,7 @@ async function insertNewHeader(generated_text) {
       // create new element above this h1
       // Główny kontener bannera
       const banner = document.createElement("div");
+      banner.id = "przeinaczai";
       banner.style.position = "relative";
       banner.style.background = surface;
       banner.style.border = `1px solid ${border}`;
@@ -155,6 +156,7 @@ async function insertNewHeader(generated_text) {
   } else {
     console.error("⚠️ No <h1> element found to insert the new header above. ⚠️");
   }
+}
 
 function doesCachedValueExist(url, persona, absurd_level){
   const key = url + "_" + persona + "_" + absurd_level;

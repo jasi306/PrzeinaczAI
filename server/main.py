@@ -40,5 +40,5 @@ async def create_item(item: Item):
     #     contents=f"Przepisz tekst w stylu {item.persona}. Nie dodawaj komentarzy ani wyjaśnień. Zachowaj spójność, i płynność oryginalnego tekstu. Dodaj <br> w odpowiednich miejscach. Tekst: {item.textContent}",
     # )
     # return {"msg": f"{response.text}"}
-    placeholder = f"{item.persona} (Absurd level: {item.absurd_level}): {item.textContent}"
+    placeholder = f"{item.persona} (Absurd level: {item.absurd_level}):"
     return {"msg": f"{placeholder}"}
