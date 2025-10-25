@@ -1,4 +1,8 @@
-console.log("saniycheck")
+window.addEventListener("load", () => {
+  // wait a bit longer for dynamic pages
+  setTimeout(extractAndSendArticle, 1000);
+});
+
 
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg?.type === "RUN_TRANSFORM") {
@@ -10,37 +14,9 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-function toast(text) {
-  const el = document.createElement("div");
-  el.textContent = text;
-  el.style.cssText = `
-    position:fixed; right:16px; bottom:16px; z-index:2147483647;
-    background:rgba(0,0,0,.85); color:#fff; padding:10px 14px;
-    border-radius:10px; max-width:320px; white-space:pre-wrap; font:12px/1.35 system-ui;
-  `;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1500);
-}
-
-
-fetch('http://127.0.0.1:8000/prompt/?msg="zwroc mi cytat kapitana bomby"')
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then((data) => {
-    console.log('Data fetched:', data.msg);
-  })
-  .catch((error) => {
-    console.error('Fetch error:', error);
-  });
-
-
 
 // PoC: odtwarzacz z avatarem powiązanym z wybraną personą i sensownym layoutem
-(() => {
+function toast() {
   if (window.__mini_audio_player__) return;
   window.__mini_audio_player__ = true;
 
@@ -228,4 +204,46 @@ fetch('http://127.0.0.1:8000/prompt/?msg="zwroc mi cytat kapitana bomby"')
     drag = false;
     document.removeEventListener("mousemove", onMove);
   }
-})();
+};
+
+
+async function extractAndSendArticle() {
+  try {
+    console.log("Extracting article content with Readability...");
+
+    const clone = document.cloneNode(true);
+    const reader = new Readability(clone);
+    const article = reader.parse();
+
+    if (!article) {
+      console.warn("⚠️ No article content could be extracted. ⚠️");
+      return;
+    }
+
+    console.log("Sending extracted article to localhost:8000...");
+
+    const response = await fetch("http://localhost:8000/text/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: article.title,
+        persona: "kapitan bomba",
+        personaDescription: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki.",
+        textContent: article.textContent
+        // url: window.location.href,
+        // excerpt: article.excerpt,
+        // htmlContent: article.content
+      })
+    });
+
+    if (!response.ok) {
+      console.error("❌ Server responded with an error:", response.status, response.statusText);
+      return;
+    }
+
+    const result = await response.text();
+    console.log("✅ Server response:", result);
+  } catch (err) {
+    console.error("❌ Error while parsing or sending article:", err);
+  }
+}
