@@ -1,8 +1,8 @@
 // Fixed personas (bez ustawień użytkownika)
 const PERSONAS = [
-  { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" },
-  { id: "joda",          name: "Yoda",             img: "personas/yoda.png"   }, // id ujednolicone: "joda"
-  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png"  }
+  { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" , desc: "Dodawaj angedoty i ciekawostki historyczne, mów z pasją o jedzeniu i kulturze." },
+  { id: "joda",          name: "Yoda",             img: "personas/yoda.png", desc: "Mow tak jak Yoda ze Clone Wars. Buduj mniej ale dluzszych zdan. Nawiazuj do uniwersum Star Wars - do innych postaci i wydarzen." }, // id ujednolicone: "joda"
+  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png", desc: "Nie cenzuruj się, używaj wulgaryzmów i mów jak kapitan bomba z kreskówki."  }
 ];
 
 const grid = document.getElementById("grid");
@@ -87,8 +87,9 @@ async function onApply() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   await chrome.tabs.sendMessage(tab.id, {
     type: "RUN_EXTRACTION",
-    persona: currentPersonaId,
-    absurd_level: level
+    persona: (PERSONAS.find(p => p.id === currentPersonaId) || {}).name,
+    absurd_level: level,
+    desc: (PERSONAS.find(p => p.id === currentPersonaId) || {}).desc
   });
 
   window.close(); // zamknij popup po zapisaniu

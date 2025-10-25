@@ -85,13 +85,13 @@ class Item(BaseModel):
 
 @app.post("/text/")
 async def create_item(item: Item):
-    # response = client.models.generate_content(
-    #     model="gemini-2.5-flash-lite",
-    #     contents=f"Przepisz tekst w stylu {item.persona}. Nie dodawaj komentarzy ani wyjaśnień. Zachowaj spójność, i płynność oryginalnego tekstu. Dodaj <br> w odpowiednich miejscach. Tekst: {item.textContent}",
-    # )
-    # return {"msg": f"{response.text}"}
-    placeholder = f"{item.persona} (Absurd level: {item.absurd_level}):"
-    return {"msg": f"{placeholder}"}
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=f"Zinterpretuj w stylu {item.persona}. {item.personaDescription}. Skroc mocno wypowiedz. Nie dodawaj komentarzy ani wyjaśnień. Dodaj <br> w odpowiednich miejscach. Tekst: {item.textContent}",
+    )
+    return {"msg": f"{response.text}"}
+    # placeholder = f"{item.persona} (Absurd level: {item.absurd_level}, {item.personaDescription}):"
+    # return {"msg": f"{placeholder}"}
 
 
 # =====================================================================
