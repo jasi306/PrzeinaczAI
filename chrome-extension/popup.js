@@ -1,42 +1,44 @@
-// Default personas fallback
-const DEFAULT_PERSONAS = [
-  { id:"robert", name:"Robert Makłowicz" },
-  { id:"bomba", name:"Kapitan Bomba" },
-  { id:"yoda", name:"Yoda" },
+// Fixed personas (no user edits)
+const PERSONAS = [
+  { id: "robert",        name: "Robert Makłowicz", img: "personas/robert.png" },
+  { id: "kapitan-bomba", name: "Kapitan Bomba",    img: "personas/bomba.png"  },
+  { id: "yoda",          name: "Yoda",             img: "personas/yoda.png"   }
 ];
 
-const $persona = document.getElementById("persona");
-const $status = document.getElementById("status");
+const grid = document.getElementById("grid");
+const statusEl = document.getElementById("status");
 
 init();
 
 async function init() {
-  const { personas, persona_id } = await chrome.storage.sync.get(["personas", "persona_id"]);
-  const list = Array.isArray(personas) && personas.length ? personas : DEFAULT_PERSONAS;
-
-  // Fill dropdown
-  $persona.innerHTML = "";
-  for (const p of list) {
-    const opt = document.createElement("option");
-    opt.value = p.id; opt.textContent = p.name;
-    if (persona_id === p.id) opt.selected = true;
-    $persona.appendChild(opt);
-  }
+  const { persona_id } = await chrome.storage.sync.get(["persona_id"]);
+  render(persona_id || PERSONAS[0].id);
 }
 
-document.getElementById("apply").addEventListener("click", async () => {
-  const id = $persona.value;
+function render(selectedId) {
+  grid.innerHTML = "";
+  PERSONAS.forEach(p => {
+    const card = document.createElement("button");
+    card.className = "card" + (p.id === selectedId ? " active" : "");
+    card.dataset.id = p.id;
+
+    const img = document.createElement("img");
+    img.src = p.img; img.alt = p.name;
+
+    const name = document.createElement("div");
+    name.className = "name"; name.textContent = p.name;
+
+    card.append(img, name);
+    card.addEventListener("click", () => selectPersona(p.id));
+    grid.appendChild(card);
+  });
+}
+
+async function selectPersona(id) {
   await chrome.storage.sync.set({ persona_id: id });
-  // Notify other parts (content/background)
   chrome.runtime.sendMessage({ type: "SET_PERSONA", id });
-  setStatus("Zapisano: " + id);
-});
-
-document.getElementById("openOptions").addEventListener("click", () => {
-  chrome.runtime.openOptionsPage();
-});
-
-function setStatus(msg) {
-  $status.textContent = msg;
-  setTimeout(() => ($status.textContent = ""), 1500);
+  render(id);
+  flash(`Wybrano: ${PERSONAS.find(p => p.id === id)?.name || id}`);
 }
+
+function flash(t) { statusEl.textContent = t; setTimeout(() => statusEl.textContent="", 1000); }

@@ -4,13 +4,6 @@
   "manifest_version": 3,
   "description": "Rozszerzenie przeinacza artykuły na bardziej Makłowiczowe za pomocą AI.",
   "host_permissions": ["https://api.openai.com/*"],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_start"
-    }
-  ],
     "icons": {
     "16": "icons/p.png",
     "48": "icons/p.png",
